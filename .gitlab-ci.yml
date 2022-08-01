@@ -1,7 +1,7 @@
 stages:
     - build
     - test
-    - deploy
+#    - deploy
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
@@ -24,6 +24,8 @@ build:
 test:
   stage: test
   image: docker:20.10.16-dind
+  services:
+    - docker:20.10.16-dind
   before_script:    
     - docker info
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
