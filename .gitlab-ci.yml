@@ -28,4 +28,4 @@ test:
     - docker:20.10.16-dind
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker run --rm 'registry.gitlab.com/taylor.f/biostar-central/master:latest' 'make forum init'
+    - docker run --rm 'registry.gitlab.com/taylor.f/biostar-central/master:latest' 'make --help'
