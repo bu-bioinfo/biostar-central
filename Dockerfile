@@ -24,3 +24,4 @@ RUN python manage.py collectstatic --noinput -v 0 --settings biostar.forum.setti
 # RUN make forum test
 
 # ENTRYPOINT ["conda", "run", "-n", "engine", "make", "forum", "serve"]
+ENTRYPONT ["/bin/bash"]
