@@ -1,0 +1,7 @@
+version: '3.6'
+services:
+  biostars:
+    image: 'registry.gitlab.com/taylor.f/biostar-central/master:latest'
+    restart: always
+    ports:
+      - "80:80"

@@ -1,7 +1,7 @@
 stages:
     - build
-    - test
-#    - deploy
+#    - test
+    - deploy
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
@@ -29,3 +29,14 @@ build:
 #   script:
 #     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
 #     - docker run 'registry.gitlab.com/taylor.f/biostar-central/master:latest' 'conda run -n engine make forum init && conda run -n engine make forum test'
+
+deploy:
+  stage: deploy
+  image: docker:20.10.16-dind
+  script:
+    - chmod og= $ID_RSA
+    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/home/deployer/biostar-run
+    # login to gitlab registry       
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    # then we cd to folder with docker-compose, run docker-compose pull to update images, and run services with `docker-compose up -d`
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/$SERVER_USER/biostar-run && docker compose -f docker-compose.yml pull web && HOME=/home/dev docker compose -f docker-compose.yml up -d"
