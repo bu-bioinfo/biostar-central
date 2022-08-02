@@ -20,8 +20,8 @@ RUN conda install --file /biostar-central/conf/conda-packages.txt
 RUN python manage.py migrate --settings biostar.forum.settings
 RUN python manage.py collectstatic --noinput -v 0 --settings biostar.forum.settings
 
-# RUN make forum init 
-# RUN make forum test
+RUN make forum init 
+RUN make forum test
 
 # ENTRYPOINT ["conda", "run", "-n", "engine", "make", "forum", "serve"]
-ENTRYPOiNT ["/bin/bash"]
+# ENTRYPOiNT ["/bin/bash"]
