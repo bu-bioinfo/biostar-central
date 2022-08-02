@@ -26,8 +26,6 @@ test:
   image: docker:20.10.16-dind
   services:
     - docker:20.10.16-dind
-  before_script:    
-    - docker info
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
   script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker run --rm -i biostar-central:latest 'make forum init && make forum test'
