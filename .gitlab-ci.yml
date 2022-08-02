@@ -21,11 +21,11 @@ build:
     - docker push $TAG_COMMIT
     - docker push $TAG_LATEST
 
-test:
-  stage: test
-  image: docker:20.10.16-dind
-  services:
-    - docker:20.10.16-dind
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker run --rm 'registry.gitlab.com/taylor.f/biostar-central/master:latest' 'conda run -n engine make forum init && conda run -n engine make forum test'
+# test:
+#   stage: test
+#   image: docker:20.10.16-dind
+#   services:
+#     - docker:20.10.16-dind
+#   script:
+#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+#     - docker run 'registry.gitlab.com/taylor.f/biostar-central/master:latest' 'conda run -n engine make forum init && conda run -n engine make forum test'
