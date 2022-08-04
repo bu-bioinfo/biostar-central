@@ -3,5 +3,6 @@ services:
   biostars:
     image: 'registry.gitlab.com/taylor.f/biostar-central/master:latest'
     restart: always
+    network_mode: "host"
     ports:
       - "8000:8000"
