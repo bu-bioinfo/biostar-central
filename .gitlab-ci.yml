@@ -14,6 +14,8 @@ build:
   services:
   - docker:20.10.16-dind
   before_script:    
+    - echo $CI_BUILD_TOKEN 
+    - echo $CI_REGISTRY
     - docker info
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
   script:
