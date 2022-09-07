@@ -4,4 +4,8 @@ services:
     image: 'biostars-central:latest'
     restart: always
     ports:
-      - '8000:8000'
+      - '80:8000'
+    volumes:
+      - bfbstore:/biostar-central
+volumes:
+  bfbstore:
