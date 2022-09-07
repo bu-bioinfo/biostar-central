@@ -92,7 +92,6 @@ echo:
 
 serve: init
 	python manage.py runserver --settings ${DJANGO_SETTINGS_MODULE} 0.0.0.0:8000
-#	python manage.py runserver --settings ${DJANGO_SETTINGS_MODULE}
 
 init: echo
 	python manage.py collectstatic --noinput -v 0  --settings ${DJANGO_SETTINGS_MODULE}
