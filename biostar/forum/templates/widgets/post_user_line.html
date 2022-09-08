@@ -19,13 +19,16 @@
 
 
         written {{ post.creation_date|time_ago }} by
+        {% if post.anon %}
+          Anonymous
+        {% else %}
+          <a itemprop="author" itemscope itemtype="https://schema.org/Person"
+             href="{% url "user_profile" post.author.profile.uid %}">
+              <span itemprop="name">{{ post.author.profile.name|truncatechars:40 }}</span>
+          </a>
 
-        <a itemprop="author" itemscope itemtype="https://schema.org/Person"
-           href="{% url "user_profile" post.author.profile.uid %}">
-            <span itemprop="name">{{ post.author.profile.name|truncatechars:40 }}</span>
-        </a>
-
-        {% user_icon user=post.author %}
+          {% user_icon user=post.author %}
+        {%endif%}
 
 
 {% elif post %}
@@ -34,16 +37,16 @@
     {% block date %}
         {{ post.lastedit_date|time_ago }} by
     {% endblock %}
+    {% if post.anon %}
+      Anonymous
+    {% else %}
+      <a href="{% url "user_profile" post.lastedit_user.profile.uid %}">
+          {{ post.lastedit_user.profile.name|truncatechars:40 }}
+      </a>
 
-    <a href="{% url "user_profile" post.lastedit_user.profile.uid %}">
-        {{ post.lastedit_user.profile.name|truncatechars:40 }}
-    </a>
-
-    {% user_icon user=post.lastedit_user %}
+      {% user_icon user=post.lastedit_user %}
     </span>
+    {% endif %}
+
 
 {% endif %}
-
-
-
-
