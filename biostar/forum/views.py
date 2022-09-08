@@ -53,6 +53,7 @@ LIMIT_MAP = dict(
 )
 
 
+@login_required
 def post_exists(func):
     """
     Ensure uid passed to view function exists.
@@ -125,11 +126,13 @@ def apply_sort(posts, limit=None, order=None):
 
 
 @reset_count(key='spam_count')
+@login_required
 def get_spam(request):
     posts = Post.objects.filter(spam=Post.SPAM)
     return posts
 
 
+@login_required
 def get_posts(request, topic=""):
     """
     Generates a post list on a topic.
@@ -183,6 +186,7 @@ def get_posts(request, topic=""):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def post_search(request):
     query = request.GET.get('query', '')
     length = len(query.replace(" ", ""))
@@ -206,6 +210,7 @@ def post_search(request):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def pages(request, fname):
     # Add markdown file extension to markdown
     infile = f"{fname}.md"
@@ -226,6 +231,7 @@ def pages(request, fname):
 
 
 @is_moderator
+@login_required
 def mark_spam(request, uid):
     """
     Mark post as spam.
@@ -251,6 +257,7 @@ def mark_spam(request, uid):
 
 
 @is_moderator
+@login_required
 def release_quar(request, uid):
     """
     Release quarantined post to the public.
@@ -270,6 +277,7 @@ def release_quar(request, uid):
     return redirect('/')
 
 
+@login_required
 def post_list(request, topic=None, tag="", cutoff=None, ordering=None):
     """
     Post listing. Filters, orders and paginates posts based on GET parameters.
@@ -308,6 +316,7 @@ def post_list(request, topic=None, tag="", cutoff=None, ordering=None):
 
 @check_params(allowed=ALLOWED_PARAMS)
 @ensure_csrf_cookie
+@login_required
 def latest(request):
     """
     Show latest post listing.
@@ -322,6 +331,7 @@ def latest(request):
 
 @check_params(allowed=ALLOWED_PARAMS)
 @ensure_csrf_cookie
+@login_required
 def post_tags(request, tag):
     """
     Show list of posts belonging to one post.
@@ -336,6 +346,7 @@ def post_tags(request, tag):
 
 @check_params(allowed=ALLOWED_PARAMS)
 @ensure_csrf_cookie
+@login_required
 def post_topic(request, topic):
     """
     Show list of posts of a given type
@@ -367,6 +378,7 @@ def bookmarks(request):
 
 @ensure_csrf_cookie
 @authenticated
+@login_required
 def mytags(request):
     posts = post_list(request, topic=MYTAGS)
 
@@ -376,6 +388,7 @@ def mytags(request):
 
 @ensure_csrf_cookie
 @authenticated
+@login_required
 def myposts(request):
     """
     Show posts by user
@@ -389,6 +402,7 @@ def myposts(request):
 
 @ensure_csrf_cookie
 @authenticated
+@login_required
 def following(request):
     """
     Show posts followed by user.
@@ -401,6 +415,7 @@ def following(request):
 
 @authenticated
 @reset_count(key="vote_count")
+@login_required
 def myvotes(request):
     """
     Show posts by user that received votes
@@ -421,6 +436,7 @@ def myvotes(request):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def tags_list(request):
     """
     Show posts by user
@@ -450,6 +466,7 @@ def tags_list(request):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def community_list(request):
     page = request.GET.get("page", 1)
     ordering = request.GET.get("order", "visit")
@@ -482,6 +499,7 @@ def community_list(request):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def badge_list(request):
     badges = Badge.objects.annotate(count=Count("award")).order_by('-count')
     context = dict(badges=badges)
@@ -489,6 +507,7 @@ def badge_list(request):
 
 
 @check_params(allowed=ALLOWED_PARAMS)
+@login_required
 def badge_view(request, uid):
     badge = Badge.objects.filter(uid=uid).annotate(count=Count("award")).first()
     target = request.GET.get('user')
@@ -515,6 +534,7 @@ def badge_view(request, uid):
 
 @check_params(allowed=ALLOWED_PARAMS)
 @ensure_csrf_cookie
+@login_required
 def post_view(request, uid):
     "Return a detailed view for specific post"
 
@@ -617,6 +637,7 @@ def view_logs(request):
 
 
 @is_staff
+@login_required
 def merge_profile(request):
     """
     Merge two profiles into one.

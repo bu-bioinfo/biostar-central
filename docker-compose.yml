@@ -6,6 +6,6 @@ services:
     ports:
       - '80:8000'
     volumes:
-      - bfbstore:/biostar-central
+      - bfbstore:/biostar-central/export
 volumes:
   bfbstore:
