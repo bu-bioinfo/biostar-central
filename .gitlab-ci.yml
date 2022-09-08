@@ -28,6 +28,7 @@ deploy:
   script:
     - cat $ID_RSA > /id_rsa
     - chmod og= /id_rsa
+    - ls /
     - scp -i /id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/home/deployer/biostar-run
     # login to gitlab registry       
     - ssh -i /id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
