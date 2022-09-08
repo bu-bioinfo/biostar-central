@@ -21,6 +21,8 @@ build:
     - docker build -t $TAG_COMMIT -t $TAG_LATEST .
     - docker push $TAG_COMMIT
     - docker push $TAG_LATEST
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
 
 deploy:
   stage: deploy
@@ -32,4 +34,6 @@ deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     # then we cd to folder with docker-compose, run docker-compose pull to update images, and run services with `docker-compose up -d`
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/$SERVER_USER/biostar-run && docker compose -f docker-compose.yml pull biostars && HOME=/home/dev docker compose -f docker-compose.yml up -d"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
 
