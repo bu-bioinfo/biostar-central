@@ -12,6 +12,8 @@ build:
   image: docker:20.10.16
   services:
   - docker:20.10.16-dind
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:    
     - echo $CI_BUILD_TOKEN 
     - echo $CI_REGISTRY
