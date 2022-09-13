@@ -10,11 +10,11 @@ DEBUG = True
 ALLOW_SIGNUP = False
 
 ADMINS = [
-    ("Admin User", "admin@localhost")
+    ("Admin user", "tfalk@bu.edu")
 ]
 
 # The address the error emails are coming from.
-SERVER_EMAIL = "admin@localhost"
+SERVER_EMAIL = "tfalk@bu.edu"
 
 # Whitelist of Ip addresses to not rate limit.
 WHITELIST_IP = []
@@ -42,7 +42,8 @@ DEFAULT_ADMIN_PASSWORD = "admin@localhost"
 ADMIN_NAME, ADMIN_EMAIL = ADMINS[0]
 
 # The default sender name on emails.
-DEFAULT_FROM_EMAIL = f"{ADMIN_NAME} <{ADMIN_EMAIL}>"
+# DEFAULT_FROM_EMAIL = f"{ADMIN_NAME} <{ADMIN_EMAIL}>"
+DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # User score threshold to be considered low reputation.
 LOW_REP_THRESHOLD = 0

@@ -23,10 +23,10 @@ INTERNAL_IPS = ['127.0.0.1']
 
 # Admin users will be created automatically with DEFAULT_ADMIN_PASSWORD.
 ADMINS = [
-    ("Admin User", "admin@localhost"),
+    ("Admin User", "tfalk@bu.edu"),
 ]
 
-DEFAULT_ADMIN_PASSWORD = "admin@localhost"
+DEFAULT_ADMIN_PASSWORD = "bioinfo"
 
 # Allowed CORS websites
 CORS_ORIGIN_WHITELIST = []
@@ -43,7 +43,7 @@ DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 DEFAULT_NOREPLY_EMAIL = ADMIN_EMAIL
 
 # Email used to send errors to ADMINS
-SERVER_EMAIL = ADMIN_EMAIL
+SERVER_EMAIL = "tfalk@bu.edu"
 
 FROM_EMAIL_PATTERN = "%s <%s>"
 
@@ -167,7 +167,8 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', 'www.lvh.me','bfbiostars.bu.edu', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'www.lvh.me',
+                 'bfbiostars.bu.edu', 'localhost', '127.0.0.1']
 
 # The URL configuration.
 ROOT_URLCONF = 'biostar.urls'
@@ -214,12 +215,18 @@ STATICFILES_FINDERS = [
 LOGGER_NAME = "biostar"
 
 # Valid options; block, disabled, threaded, uwsgi, celery.
-TASK_RUNNER = 'block'
+TASK_RUNNER = 'threaded'
 
 TASK_MODULES = []
 
-# The email delivery engine.
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Amazon SES email settings.
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "tfalk@bu.edu"
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_HOST_USER = "AKIA3LORPRLUPDQQ2GFM"
+EMAIL_HOST_PASSWORD = "BIBHiH0FYjxSbEQzlwfvuAbC0WCZNNKy27Mmmwcqm0pI"
+EMAIL_PORT = 587
+
 
 # Session engine.
 SESSION_ENGINE = "django.contrib.sessions.backends.db"

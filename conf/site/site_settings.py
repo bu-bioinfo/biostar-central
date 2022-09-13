@@ -12,7 +12,7 @@ SECRET_KEY = "secretkey"
 
 # Admin users will be created automatically with DEFAULT_ADMIN_PASSWORD.
 ADMINS = [
-    ("Admin User", "admin@localhost")
+    ("Admin User", "tfalk@bu.edu")
 ]
 
 # Set the default admin password.

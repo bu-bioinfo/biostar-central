@@ -120,7 +120,8 @@ def apply_sort(posts, limit=None, order=None):
         posts = posts.filter(lastedit_date__gt=delta)
 
     # Select related information used during rendering.
-    posts = posts.select_related("root").select_related("author__profile", "lastedit_user__profile")
+    posts = posts.select_related("root").select_related(
+        "author__profile", "lastedit_user__profile")
 
     return posts
 
@@ -163,10 +164,12 @@ def get_posts(request, topic=""):
         posts = posts.filter(type=Post.QUESTION, answer_count=0)
 
     elif topic == BOOKMARKS and user.is_authenticated:
-        posts = Post.objects.filter(votes__author=user, votes__type=Vote.BOOKMARK)
+        posts = Post.objects.filter(
+            votes__author=user, votes__type=Vote.BOOKMARK)
 
     elif topic == FOLLOWING and user.is_authenticated:
-        posts = posts.filter(subs__user=user).exclude(subs__type=Subscription.NO_MESSAGES)
+        posts = posts.filter(subs__user=user).exclude(
+            subs__type=Subscription.NO_MESSAGES)
 
     elif topic == MYPOSTS and user.is_authenticated:
         # Show users all of their posts ( deleted, spam, or quarantined )
@@ -197,12 +200,14 @@ def post_search(request):
     sortedby = mapper.get(order)
 
     if length < settings.SEARCH_CHAR_MIN:
-        messages.error(request, "Enter more characters before preforming search.")
+        messages.error(
+            request, "Enter more characters before preforming search.")
         return redirect(reverse('post_list'))
 
     # Reverse sort when ordering by date.
     revsort = order == 'date'
-    results, indexed = search.perform_search(query=query, page=page, reverse=revsort, sortedby=sortedby)
+    results, indexed = search.perform_search(
+        query=query, page=page, reverse=revsort, sortedby=sortedby)
 
     context = dict(results=results, query=query, indexed=indexed, order=order)
 
@@ -222,7 +227,8 @@ def pages(request, fname):
         return redirect("post_list")
 
     admins = User.objects.filter(profile__role=Profile.MANAGER)
-    mods = User.objects.filter(profile__role=Profile.MODERATOR).exclude(id__in=admins)
+    mods = User.objects.filter(
+        profile__role=Profile.MODERATOR).exclude(id__in=admins)
     admins = admins.prefetch_related("profile").order_by("-profile__score")
     mods = mods.prefetch_related("profile").order_by("-profile__score")
     context = dict(file_path=doc, tab=fname, admins=admins, mods=mods)
@@ -291,7 +297,8 @@ def post_list(request, topic=None, tag="", cutoff=None, ordering=None):
 
     if tag:
         # Get all open top level posts.
-        posts = Post.objects.filter(is_toplevel=True, status=Post.OPEN, tags__name__iexact=tag)
+        posts = Post.objects.filter(
+            is_toplevel=True, status=Post.OPEN, tags__name__iexact=tag)
         cache_key = ''
     else:
         # Get posts available to users.
@@ -306,7 +313,8 @@ def post_list(request, topic=None, tag="", cutoff=None, ordering=None):
         posts = posts[:cutoff]
 
     # Filter for any empty strings
-    paginator = CachedPaginator(cache_key=cache_key, object_list=posts, per_page=settings.POSTS_PER_PAGE)
+    paginator = CachedPaginator(
+        cache_key=cache_key, object_list=posts, per_page=settings.POSTS_PER_PAGE)
 
     # Apply the post paging.
     posts = paginator.get_page(page)
@@ -493,7 +501,8 @@ def community_list(request):
     # Create the paginator (six users per row)
     paginator = CachedPaginator(object_list=users, per_page=60)
     users = paginator.get_page(page)
-    context = dict(tab="community", users=users, query=query, order=ordering, limit=limit_to)
+    context = dict(tab="community", users=users, query=query,
+                   order=ordering, limit=limit_to)
 
     return render(request, "community_list.html", context=context)
 
@@ -509,7 +518,8 @@ def badge_list(request):
 @check_params(allowed=ALLOWED_PARAMS)
 @login_required
 def badge_view(request, uid):
-    badge = Badge.objects.filter(uid=uid).annotate(count=Count("award")).first()
+    badge = Badge.objects.filter(uid=uid).annotate(
+        count=Count("award")).first()
     target = request.GET.get('user')
     page = request.GET.get('page', 1)
 
@@ -523,7 +533,8 @@ def badge_view(request, uid):
         user = User.objects.filter(profile__uid=target).first()
         awards = awards.filter(user=user)
 
-    awards = awards.prefetch_related("user", "user__profile", "post", "post__root")
+    awards = awards.prefetch_related(
+        "user", "user__profile", "post", "post__root")
     paginator = Paginator(object_list=awards, per_page=settings.POSTS_PER_PAGE)
 
     awards = paginator.get_page(page)
@@ -557,7 +568,8 @@ def post_view(request, uid):
     form = forms.PostShortForm(user=request.user, post=post)
 
     if request.method == "POST":
-        form = forms.PostShortForm(data=request.POST, ptype=Post.ANSWER, user=request.user, post=post)
+        form = forms.PostShortForm(
+            data=request.POST, ptype=Post.ANSWER, user=request.user, post=post)
         if form.is_valid():
             answer = form.save()
             return redirect(answer.get_absolute_url())
@@ -565,10 +577,12 @@ def post_view(request, uid):
         messages.error(request, form.errors)
 
     # Build the comment tree .
-    root, comment_tree, answers, thread = auth.post_tree(user=request.user, root=post.root)
+    root, comment_tree, answers, thread = auth.post_tree(
+        user=request.user, root=post.root)
 
     # Bump post views.
-    models.update_post_views(post=post, request=request, timeout=settings.POST_VIEW_TIMEOUT)
+    models.update_post_views(post=post, request=request,
+                             timeout=settings.POST_VIEW_TIMEOUT)
 
     context = dict(post=root, tree=comment_tree, form=form, answers=answers)
 
@@ -590,7 +604,8 @@ def new_post(request):
     form = forms.PostLongForm(user=request.user, initial=initial)
     if request.method == "POST":
 
-        form = forms.PostLongForm(data=request.POST, user=request.user, initial=initial)
+        form = forms.PostLongForm(
+            data=request.POST, user=request.user, initial=initial)
         tag_val = form.data.get('tag_val')
         content = form.data.get('content', '')
         if form.is_valid():
