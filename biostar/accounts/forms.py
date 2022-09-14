@@ -93,6 +93,9 @@ class SignUpForm(forms.Form):
     def clean_email(self):
 
         data = self.cleaned_data['email']
+        # gotta go to BU
+        if not bool(re.match('.*@bu\.edu$', data)):
+            raise forms.ValidationError("Email must originate from a bu.edu domain.")
         if User.objects.filter(email=data).exists():
             raise forms.ValidationError("This email is already being used.")
         return data

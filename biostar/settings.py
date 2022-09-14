@@ -222,9 +222,9 @@ TASK_MODULES = []
 # Amazon SES email settings.
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "tfalk@bu.edu"
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
-EMAIL_HOST_USER = "AKIA3LORPRLUPDQQ2GFM"
-EMAIL_HOST_PASSWORD = "BIBHiH0FYjxSbEQzlwfvuAbC0WCZNNKy27Mmmwcqm0pI"
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = "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"
 EMAIL_PORT = 587
 
 

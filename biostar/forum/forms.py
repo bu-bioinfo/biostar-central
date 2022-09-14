@@ -142,7 +142,8 @@ class PostLongForm(forms.Form):
 
     anon = forms.BooleanField(label="Anonymous",
                               required=False,
-                              help_text="Post anonymously?")
+                              help_text="Post anonymously?",
+                              widget=forms.CheckboxInput(attrs={'style':'vertical-align: middle'}))
 
     def __init__(self, post=None, user=None, *args, **kwargs):
         self.post = post
