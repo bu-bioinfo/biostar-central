@@ -94,13 +94,14 @@ MIDDLEWARE = [
 
 # Site specific information
 SITE_ID = 1
-SITE_DOMAIN = "localhost"
+SITE_DOMAIN = "bfbiostars.bu.edu"
 SITE_NAME = "Biostar Engine"
 
 # Deployment specific parameters.
 PROTOCOL = "http"
-HTTP_PORT = '8000'
-BASE_URL = f"{PROTOCOL}://{SITE_DOMAIN}:{HTTP_PORT}"
+HTTP_PORT = '80'
+# BASE_URL = f"{PROTOCOL}://{SITE_DOMAIN}:{HTTP_PORT}"
+BASE_URL = f"{PROTOCOL}://{SITE_DOMAIN}"
 
 # Change this in production!
 SECRET_KEY = 'secret-key'
