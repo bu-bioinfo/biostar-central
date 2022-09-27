@@ -60,7 +60,9 @@
             <a class="ui button cancel">
                 <i class="x icon"></i>Cancel
             </a>
-
+            <label>{{ form.anon.label }}</label>
+              {{ form.anon }}
+            <p class="muted">{{ form.anon.help_text }}</p>
 
             {% if post and not new %}
                 <a class="ui right floated button delete">
