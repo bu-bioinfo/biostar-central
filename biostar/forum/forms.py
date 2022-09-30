@@ -29,7 +29,8 @@ MAX_TAG_LEN = 200
 
 def log_edits(user, post):
     if user != post.author:
-        auth.db_logger(user=user, text=f'edited post', target=post.author, post=post)
+        auth.db_logger(user=user, text=f'edited post',
+                       target=post.author, post=post)
 
 
 def valid_language(text):
@@ -42,7 +43,8 @@ def valid_language(text):
             return
 
         if lang not in supported_languages:
-            raise ValidationError(f'Language "{lang}" is not one of the supported languages {supported_languages}!')
+            raise ValidationError(
+                f'Language "{lang}" is not one of the supported languages {supported_languages}!')
 
 
 def valid_title(text):
@@ -53,9 +55,11 @@ def valid_title(text):
 
     text = text.replace(" ", '')
     if len(text) < MIN_CHARS:
-        raise ValidationError(f'Too short, please add more than {MIN_CHARS} characters.')
+        raise ValidationError(
+            f'Too short, please add more than {MIN_CHARS} characters.')
     if len(text) > MAX_TITLE:
-        raise ValidationError(f'Too Long, please add less than {MAX_TITLE} characters.')
+        raise ValidationError(
+            f'Too Long, please add less than {MAX_TITLE} characters.')
 
     try:
         text.encode('utf-8')
@@ -111,22 +115,26 @@ def required_tags(lst):
     # If one common element is not found, display the required tasks
     if not common_elem(source_set, target_set):
         url = settings.REQUIRED_TAGS_URL
-        msg = mark_safe(f"At least one package from <a href='{url}' target='_blank'>this list</a> is required.")
+        msg = mark_safe(
+            f"At least one package from <a href='{url}' target='_blank'>this list</a> is required.")
         raise forms.ValidationError(msg)
 
     return
 
 
 class PostLongForm(forms.Form):
-    choices = [opt for opt in Post.TYPE_CHOICES if opt[0] in Post.TOP_LEVEL and opt[0] != Post.HERALD]
+    choices = [opt for opt in Post.TYPE_CHOICES if opt[0]
+               in Post.TOP_LEVEL and opt[0] != Post.HERALD]
 
     if settings.ALLOWED_POST_TYPES:
-        choices = [opt for opt in choices if opt[1] in settings.ALLOWED_POST_TYPES]
+        choices = [opt for opt in choices if opt[1]
+                   in settings.ALLOWED_POST_TYPES]
 
     choices = informative_choices(choices=choices)
 
     post_type = forms.IntegerField(label="Post Type",
-                                   widget=forms.Select(choices=choices, attrs={'class': "ui dropdown"}),
+                                   widget=forms.Select(choices=choices, attrs={
+                                                       'class': "ui dropdown"}),
                                    help_text="Select a post type.")
     title = forms.CharField(label="Post Title", max_length=200, min_length=2,
                             validators=[valid_title],
@@ -143,7 +151,7 @@ class PostLongForm(forms.Form):
     anon = forms.BooleanField(label="Anonymous",
                               required=False,
                               help_text="Post anonymously?",
-                              widget=forms.CheckboxInput(attrs={'style':'vertical-align: middle'}))
+                              widget=forms.CheckboxInput(attrs={'style': 'vertical-align: middle'}))
 
     def __init__(self, post=None, user=None, *args, **kwargs):
         self.post = post
@@ -155,7 +163,8 @@ class PostLongForm(forms.Form):
         Edit an existing post.
         """
         if self.user != self.post.author and not self.user.profile.is_moderator:
-            raise forms.ValidationError("Only the author or a moderator can edit a post.")
+            raise forms.ValidationError(
+                "Only the author or a moderator can edit a post.")
         data = self.cleaned_data
 
         self.post.title = data.get('title')
@@ -184,7 +193,8 @@ class PostLongForm(forms.Form):
             for tag in tag_val:
                 match = re.match(pattern, tag)
                 if not match:
-                    raise forms.ValidationError(f'Invalid characters in tag: {tag}')
+                    raise forms.ValidationError(
+                        f'Invalid characters in tag: {tag}')
         else:
             tag_val = self.cleaned_data["tag_val"].split(',')
 
@@ -199,7 +209,8 @@ class PostLongForm(forms.Form):
         length = len(content.replace(" ", ""))
 
         if length < MIN_CHARS:
-            raise forms.ValidationError(f"Too short, place add more than {MIN_CHARS}")
+            raise forms.ValidationError(
+                f"Too short, place add more than {MIN_CHARS}")
 
         return content
 
@@ -217,6 +228,7 @@ def check_spam(content):
 
     return is_spam
 
+
 def suspend_user(user):
 
     if user.profile.trusted:
@@ -231,11 +243,12 @@ def suspend_user(user):
 
 class PostShortForm(forms.Form):
     MIN_LEN, MAX_LEN = 5, 10000
-    content = forms.CharField(widget=forms.Textarea, min_length=MIN_LEN, max_length=MAX_LEN, strip=False)
+    content = forms.CharField(
+        widget=forms.Textarea, min_length=MIN_LEN, max_length=MAX_LEN, strip=False)
     anon = forms.BooleanField(label="Anonymous",
                               required=False,
                               help_text="Post anonymously?",
-                              widget=forms.CheckboxInput(attrs={'style':'vertical-align: middle'}))
+                              widget=forms.CheckboxInput(attrs={'style': 'vertical-align: middle'}))
 
     def __init__(self, post, user=None, request=None, ptype=Post.COMMENT, *args, **kwargs):
         self.user = user
@@ -270,14 +283,17 @@ class PostShortForm(forms.Form):
 
     def save(self):
         content = self.cleaned_data.get('content', self.post.content)
+        anon = self.cleaned_data.get('anon', self.post.anon)
         post = auth.create_post(parent=self.post, author=self.user, content=content, ptype=self.ptype,
-                                root=self.post.root, title=self.post.title)
+                                root=self.post.root, title=self.post.title, anon=anon)
         return post
 
 
 class MergeProfiles(forms.Form):
-    main = forms.CharField(label='Main user email', max_length=100, required=True)
-    alias = forms.CharField(label='Alias email to merge to main', max_length=100, required=True)
+    main = forms.CharField(label='Main user email',
+                           max_length=100, required=True)
+    alias = forms.CharField(
+        label='Alias email to merge to main', max_length=100, required=True)
 
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
@@ -292,7 +308,8 @@ class MergeProfiles(forms.Form):
         merge_to = User.objects.filter(email=main).first()
 
         if self.user and not (self.user.is_staff or self.user.is_superuser):
-            raise forms.ValidationError(f'Only staff member can perform this action.')
+            raise forms.ValidationError(
+                f'Only staff member can perform this action.')
 
         if not to_delete:
             raise forms.ValidationError(f'{alias} email does not exist.')
@@ -301,7 +318,8 @@ class MergeProfiles(forms.Form):
             raise forms.ValidationError(f'{main} email does not exist.')
 
         if main == alias:
-            raise forms.ValidationError('Main and alias profiles are the same.')
+            raise forms.ValidationError(
+                'Main and alias profiles are the same.')
 
         return cleaned_data
 
