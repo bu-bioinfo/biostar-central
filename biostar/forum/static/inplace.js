@@ -24,6 +24,8 @@ function create_comment() {
 
     var content = $('#wmd-input');
     var cap_response = captcha();
+    var anon = $('#id-anon').is(':checked');
+    // console.log(anon);
 
 
     $.ajax('/ajax/comment/create/',
@@ -36,6 +38,7 @@ function create_comment() {
                 'content': content.val(),
                 'parent': uid,
                 'recaptcha_response': cap_response,
+                'anon': anon,
             },
             success: function (data) {
                 if (data.status === 'error') {

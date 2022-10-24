@@ -24,7 +24,6 @@ from . import auth, util, forms, tasks, search, views, const, moderate
 from .models import Post, Vote, Subscription, delete_post_cache, SharedLink, Diff
 
 
-
 def ajax_msg(msg, status, **kwargs):
     payload = dict(status=status, msg=msg)
     payload.update(kwargs)
@@ -145,7 +144,8 @@ def ajax_vote(request):
     if post.root.author != user and not_moderator and vote_type == Vote.ACCEPT:
         return ajax_error("Only moderators or the person asking the question may accept answers.")
 
-    msg, vote, change = auth.apply_vote(post=post, user=user, vote_type=vote_type)
+    msg, vote, change = auth.apply_vote(
+        post=post, user=user, vote_type=vote_type)
     # Expire post cache upon vote.
     delete_post_cache(post)
 
@@ -295,13 +295,14 @@ def ajax_comment_create(request):
     # Fields common to all posts
     user = request.user
     content = request.POST.get("content", "")
+    anon = request.POST.get("anon", "")
 
     parent_uid = request.POST.get('parent', '')
     parent = Post.objects.filter(uid=parent_uid).first()
     if not parent:
         return ajax_error(msg='Parent post does not exist.')
 
-    fields = dict(content=content, parent_uid=parent_uid)
+    fields = dict(content=content, parent_uid=parent_uid, anon=anon)
 
     form = forms.PostShortForm(post=parent, user=user, data=fields)
 
@@ -392,7 +393,8 @@ def handle_search(request):
                                     ).values_list('profile__handle', flat=True
                                                   ).order_by('profile__score')
     else:
-        users = User.objects.order_by('profile__score').values_list('profile__handle', flat=True)
+        users = User.objects.order_by('profile__score').values_list(
+            'profile__handle', flat=True)
 
     users = list(users[:20])
     # Return list of users matching username
@@ -447,7 +449,8 @@ def email_disable(request, uid):
         return ajax_error(msg="You can not preform this action")
 
     # Diable subs, and empty all emailing options.
-    Subscription.objects.filter(user=target).update(type=Subscription.NO_MESSAGES)
+    Subscription.objects.filter(user=target).update(
+        type=Subscription.NO_MESSAGES)
     Profile.objects.filter(pk=target.pk).update(watched_tags='', email_verified=False,
                                                 message_prefs=Profile.NO_MESSAGES, digest_prefs=Profile.NO_DIGEST)
     # Empty the watched tags
