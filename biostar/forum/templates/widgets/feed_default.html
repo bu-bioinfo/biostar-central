@@ -79,12 +79,18 @@
 
                 <div class="item spaced">
                     <a href="{% url "post_view" replies.uid %}"> {{ replies.title }}</a>
-                    by
-                    <a href="{% url "user_profile" replies.author.profile.uid %}">{{ replies.author.profile.name }}
-                    </a>
-
-                    <span>  {% user_icon user=replies.author %}</span>
-
+                    {% if replies.anon %}
+                        <!-- anonymous -->
+                        {% if user.profile.is_moderator %}
+                        (author: <a href="{% url "user_profile" replies.author.profile.uid %}">{{ replies.author.profile.name }}</a>)
+                        {% endif %}
+                    {% elif replies.author.profile.uid == user.profile.uid %}
+                        by you
+                    {% else %}
+                        by
+                        <a href="{% url "user_profile" replies.author.profile.uid %}">{{ replies.author.profile.name }}</a>
+                        <span>  {% user_icon user=replies.author %}</span>
+                    {% endif %}
                     <div class="muted">
                         {{ replies.content |truncatechars:140 }}
                     </div>
