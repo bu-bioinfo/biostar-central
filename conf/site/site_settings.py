@@ -8,15 +8,15 @@ logger = logging.getLogger("biostar")
 DEBUG = True
 
 # Set your known secret key here.
-SECRET_KEY = "secretkey"
+#SECRET_KEY = "secretkey"
 
 # Admin users will be created automatically with DEFAULT_ADMIN_PASSWORD.
-ADMINS = [
-    ("Admin User", "tfalk@bu.edu")
-]
+#ADMINS = [
+#    ("Admin User", "nope@bu.edu")
+#]
 
 # Set the default admin password.
-DEFAULT_ADMIN_PASSWORD = SECRET_KEY
+#DEFAULT_ADMIN_PASSWORD = SECRET_KEY
 
 # Set the site domain.
 SITE_DOMAIN = "foo.com"
