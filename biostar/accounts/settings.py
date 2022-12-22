@@ -4,17 +4,27 @@ from biostar.emailer.settings import *
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # Django debug flag.
-DEBUG = True
+DEBUG = False
 
 # Should the site allow signup.
 ALLOW_SIGNUP = False
 
 ADMINS = [
-    ("Admin user", "tfalk@bu.edu")
+    ("Admin user", "bfbiostars@bu.edu")
 ]
 
+# The password for admin users. Must be changed in production.
+DEFAULT_ADMIN_PASSWORD = "b101n4mat1c5!"
+
+# Shortcut to first admin information.
+ADMIN_NAME, ADMIN_EMAIL = ADMINS[0]
+
+# The default sender name on emails.
+# DEFAULT_FROM_EMAIL = f"{ADMIN_NAME} <{ADMIN_EMAIL}>"
+DEFAULT_FROM_EMAIL = ADMIN_EMAIL
+
 # The address the error emails are coming from.
-SERVER_EMAIL = "tfalk@bu.edu"
+SERVER_EMAIL = "bfbiostars@bu.edu"
 
 # Whitelist of Ip addresses to not rate limit.
 WHITELIST_IP = []
@@ -35,15 +45,6 @@ MAX_IMAGES = 100
 # User above this score do not get a reCAPTCHA
 RECAPTCHA_THRESHOLD_USER_SCORE = 1
 
-# The password for admin users. Must be changed in production.
-DEFAULT_ADMIN_PASSWORD = "admin@localhost"
-
-# Shortcut to first admin information.
-ADMIN_NAME, ADMIN_EMAIL = ADMINS[0]
-
-# The default sender name on emails.
-# DEFAULT_FROM_EMAIL = f"{ADMIN_NAME} <{ADMIN_EMAIL}>"
-DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # User score threshold to be considered low reputation.
 LOW_REP_THRESHOLD = 0
