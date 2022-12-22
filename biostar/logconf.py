@@ -82,11 +82,20 @@ LOGGING = {
 
         },
 
+        'info': {
+            'level': 'INFO',
+            'filters': ['rate_limit'],
+            'class': 'logging.FileHandler',
+            'filename': 'info.log',
+            'formatter': 'verbose'
+        },
+
         'errors': {
             'level': 'ERROR',
             'filters': ['rate_limit'],
             'class': 'logging.FileHandler',
             'filename': 'error.log',
+            'formatter': 'verbose'
         }
 
     },
@@ -94,13 +103,13 @@ LOGGING = {
     'loggers': {
 
         'django': {
-            'handlers': ['console', 'mail_admins'],
+            'handlers': ['console', 'mail_admins', 'info', 'errors'],
             'level': DJANGO_LOG_LEVEL,
             'propagate': True,
         },
 
         'engine': {
-            'handlers': ['console', 'mail_admins'],
+            'handlers': ['console', 'mail_admins', 'info', 'errors'],
             'level': LOG_LEVEL,
             'propagate': True,
         },
