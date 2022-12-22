@@ -61,7 +61,8 @@
                 <i class="x icon"></i>Cancel
             </a>
             <label>{{ form.anon.label }}</label>
-              {{ form.anon }}
+                {# can't figure out how to make the form bound so this checkbox is checked when anon is true #}
+                <input type="checkbox" name="anon" id="id_anon" {% if post.anon %} checked {% endif %}>
             <p class="muted">{{ form.anon.help_text }}</p>
 
             {% if post and not new %}

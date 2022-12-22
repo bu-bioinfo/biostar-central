@@ -150,8 +150,7 @@ class PostLongForm(forms.Form):
 
     anon = forms.BooleanField(label="Anonymous",
                               required=False,
-                              help_text="Post anonymously?",
-                              widget=forms.CheckboxInput(attrs={'style': 'vertical-align: middle'}))
+                              help_text="Post anonymously?")
 
     def __init__(self, post=None, user=None, *args, **kwargs):
         self.post = post
@@ -246,9 +245,9 @@ class PostShortForm(forms.Form):
     content = forms.CharField(
         widget=forms.Textarea, min_length=MIN_LEN, max_length=MAX_LEN, strip=False)
     anon = forms.BooleanField(label="Anonymous",
-                              required=False,
-                              help_text="Post anonymously?",
-                              widget=forms.CheckboxInput(attrs={'style': 'vertical-align: middle'}))
+        required=False,
+        help_text="Post anonymously?",
+        widget=forms.CheckboxInput(attrs={'style': 'vertical-align: middle'}))
 
     def __init__(self, post, user=None, request=None, ptype=Post.COMMENT, *args, **kwargs):
         self.user = user
@@ -278,6 +277,7 @@ class PostShortForm(forms.Form):
         self.post.lastedit_date = util.now()
         content = self.cleaned_data.get('content', self.post.content)
         log_edits(user=self.user, post=self.post)
+        self.post.anon = self.cleaned_data.get('anon', self.post.anon)
         self.post.content = content
         self.post.save()
 

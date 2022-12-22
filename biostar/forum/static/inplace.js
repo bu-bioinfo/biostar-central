@@ -24,9 +24,7 @@ function create_comment() {
 
     var content = $('#wmd-input');
     var cap_response = captcha();
-    var anon = $('#id-anon').is(':checked');
-    // console.log(anon);
-
+    var anon = $('#id_anon').is(':checked');
 
     $.ajax('/ajax/comment/create/',
         {
@@ -215,6 +213,10 @@ function edit_post(post, tags) {
 
     var cap_response = captcha();
 
+    var anon = form.find('#id_anon');
+    var is_anon = anon.is(':checked');
+    console.log(anon);
+
     $.ajax(edit_url,
         {
             type: 'POST',
@@ -226,7 +228,8 @@ function edit_post(post, tags) {
                 'title': title,
                 'type': type,
                 'tag_val': tags,
-                'recaptcha_response': cap_response
+                'recaptcha_response': cap_response,
+                'anon': is_anon
             },
             success: function (data) {
                 if (data.status === 'error') {

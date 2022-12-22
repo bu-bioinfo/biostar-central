@@ -232,8 +232,11 @@ def get_fields(request, post=None):
     tag_list = {x.strip() for x in request.POST.getlist("tag_val", [])}
     tag_val = ','.join(tag_list) or post.tag_val
 
+    # anonymous posts
+    anon = request.POST.get("anon", False)
+
     fields = dict(content=content, title=title, post_type=post_type, tag_list=tag_list, tag_val=tag_val,
-                  user=user, recaptcha_token=recaptcha_token, )
+                  user=user, recaptcha_token=recaptcha_token, anon=anon)
 
     return fields
 

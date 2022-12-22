@@ -21,6 +21,9 @@
         written {{ post.creation_date|time_ago }} by
         {% if post.anon %}
           Anonymous
+            {% if user.profile.is_moderator %}
+                (author: <a href="{% url "user_profile" post.author.profile.uid %}">{{ post.author.profile.name|truncatechars:40 }}</a>)
+            {% endif %}
         {% else %}
           <a itemprop="author" itemscope itemtype="https://schema.org/Person"
              href="{% url "user_profile" post.author.profile.uid %}">
@@ -38,7 +41,10 @@
         {{ post.lastedit_date|time_ago }} by
     {% endblock %}
     {% if post.anon %}
-      Anonymous
+        Anonymous
+            {% if user.profile.is_moderator %}
+               (author: <a href="{% url "user_profile" post.author.profile.uid %}">{{ post.author.profile.name|truncatechars:40 }}</a>)
+            {% endif %}
     {% else %}
       <a href="{% url "user_profile" post.lastedit_user.profile.uid %}">
           {{ post.lastedit_user.profile.name|truncatechars:40 }}
