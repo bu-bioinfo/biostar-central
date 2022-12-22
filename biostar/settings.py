@@ -21,33 +21,35 @@ LANGUAGE_DETECTION = ["en"]
 # Set the home page to the engine or forum
 INTERNAL_IPS = ['127.0.0.1']
 
+# configure this in accounts/settings.py
 # Admin users will be created automatically with DEFAULT_ADMIN_PASSWORD.
-ADMINS = [
-    ("Admin User", "tfalk@bu.edu"),
-]
+#ADMINS = [
+#    ("Admin User", "admin@bfbiostars.bu.edu"),
+#]
 
-DEFAULT_ADMIN_PASSWORD = "bioinfo"
+#DEFAULT_ADMIN_PASSWORD = "bioinfo"
+
+
+# Shortcut to first admin information.
+#ADMIN_NAME, ADMIN_EMAIL = ADMINS[0]
+
+# The default sender name on emails.
+#DEFAULT_FROM_EMAIL = ADMIN_EMAIL
+
+# The default no reply email.
+#DEFAULT_NOREPLY_EMAIL = ADMIN_EMAIL
+
+# Email used to send errors to ADMINS
+#SERVER_EMAIL = "bfbiostars@bu.edu"
+
+#FROM_EMAIL_PATTERN = "%s <%s>"
+
+#SEND_MAIL = True
 
 # Allowed CORS websites
 CORS_ORIGIN_WHITELIST = []
 
 POSTGRES_HOST = os.environ.setdefault("POSTGRES_HOST", "")
-
-# Shortcut to first admin information.
-ADMIN_NAME, ADMIN_EMAIL = ADMINS[0]
-
-# The default sender name on emails.
-DEFAULT_FROM_EMAIL = ADMIN_EMAIL
-
-# The default no reply email.
-DEFAULT_NOREPLY_EMAIL = ADMIN_EMAIL
-
-# Email used to send errors to ADMINS
-SERVER_EMAIL = "tfalk@bu.edu"
-
-FROM_EMAIL_PATTERN = "%s <%s>"
-
-SEND_MAIL = True
 
 # Show debug toolbar
 DEBUG_TOOLBAR = False
@@ -222,7 +224,7 @@ TASK_MODULES = []
 
 # Amazon SES email settings.
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "tfalk@bu.edu"
+DEFAULT_FROM_EMAIL = "nope@bu.edu"
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = "apikey"
 EMAIL_HOST_PASSWORD = "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"
