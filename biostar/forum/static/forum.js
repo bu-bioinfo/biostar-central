@@ -418,7 +418,7 @@ $(document).ready(function () {
 
         // Insert the error message
         message = $('<div/>').text(message).html();
-        field.before('<div class="ui small red message"> {1}</div>'.f(field_label, message))
+        field.before('<div class="ui small red message"> {1}</div>'.f(null, message))
     });
 
 
