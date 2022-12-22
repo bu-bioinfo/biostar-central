@@ -51,7 +51,9 @@
     {% get_post_list request=request target=target show=limit as post_list %}
 
     {% for post in post_list %}
-        {% post_details post=post user=request.user %}
+        {% if user.profile.is_moderator or user.profile.uid == post.author.profile.uid or not post.anon %}
+            {% post_details post=post user=request.user %}
+        {% endif %}
     {% empty %}
         <div class="ui warn message">
             No posts found.
