@@ -7,9 +7,13 @@
 <div class="user_box tablet right">
   {% if post.anon %}
     <div>Anonymous
+    <p>
     {% if user.profile.is_moderator %}
         (author: <a href="{% url "user_profile" post.author.profile.uid %}">{{ post.author.profile.name|truncatechars:40 }}</a>)
+    {% elif user.profile.uid == post.author.profile.uid %}
+        (you wrote this)
     {% endif %}
+    </p>
     </div>
   {% else %}
     <div>
