@@ -14,6 +14,7 @@ build:
     - echo $CI_REGISTRY
     - docker info
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - cat ${SECRETS} > secrets.ini
   script:
     - docker build -t $TAG_COMMIT -t $TAG_LATEST .
     - docker push $TAG_COMMIT
