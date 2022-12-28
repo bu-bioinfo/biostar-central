@@ -28,10 +28,13 @@ COPY Makefile /biostar-central/
 
 COPY biostar /biostar-central/biostar
 
+ARG SECRET_KEY
+ARG API_KEY
+
 RUN python manage.py migrate --settings biostar.forum.settings
 RUN python manage.py collectstatic --noinput -v 0 --settings biostar.forum.settings
 
 RUN make forum init
 RUN make forum test
 
-ENTRYPOINT ["conda", "run", "-n", "engine", "make", "forum", "uwsgi"]
+ENTRYPOINT ["conda", "run", "-n", "engine", "make", "forum", "serve"]
