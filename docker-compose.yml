@@ -1,11 +1,22 @@
 version: '3.6'
 services:
   biostars:
-    image: 'neuromics-pr01:5050/adam.labadorf/biostar-central/master:latest'
+    image: 'neuromics-pr01:5050/adam.labadorf/biostar-central/wsgi:latest'
     restart: always
     ports:
-      - '80:8000'
+      - '8000:8000'
     volumes:
       - bfbstore:/biostar-central/export
+
+  nginx:
+    image: nginx:1.17
+    container_name: ngx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - biostars
+
 volumes:
   bfbstore:
