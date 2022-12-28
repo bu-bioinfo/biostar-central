@@ -1,0 +1,11 @@
+version: '3.6'
+services:
+  biostars:
+    image: 'neuromics-pr01:5050/adam.labadorf/biostar-central/master:latest'
+    restart: always
+    ports:
+      - '80:8000'
+    volumes:
+      - bfbstore:/biostar-central/export
+volumes:
+  bfbstore:
