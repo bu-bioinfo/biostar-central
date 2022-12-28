@@ -12,3 +12,5 @@ __pycache__/
 *.so
 .env
 error.log
+*.crt
+*.key
