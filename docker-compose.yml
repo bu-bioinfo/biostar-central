@@ -1,20 +1,26 @@
 version: '3.6'
 services:
   biostars:
-    image: 'neuromics-pr01:5050/adam.labadorf/biostar-central/wsgi:latest'
+    image: 'neuromics-pr01:5050/adam.labadorf/biostar-central/master:latest'
+    container_name: 'biostars'
     restart: always
+    env_file:
+      - '.env'
     ports:
       - '8000:8000'
     volumes:
       - bfbstore:/biostar-central/export
+    entrypoint:
+      "conda run -n engine make forum uwsgi"
 
   nginx:
     image: nginx:1.17
     container_name: ngx
     ports:
-      - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
       - biostars
 
