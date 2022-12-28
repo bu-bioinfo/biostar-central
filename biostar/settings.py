@@ -106,10 +106,10 @@ HTTP_PORT = '80'
 BASE_URL = f"{PROTOCOL}://{SITE_DOMAIN}"
 
 # Change this in production!
-SECRET_KEY = 'secret-key'
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # Change this in production!
-API_KEY = "api-key"
+API_KEY = os.environ.get('API_KEY', '')
 
 # Used during testing
 #TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'themes', 'biostar')]
